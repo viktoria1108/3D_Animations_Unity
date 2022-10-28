@@ -30,6 +30,7 @@ public class MovePerson : MonoBehaviour
         moveDir.Normalize();
         moveDirection = moveDir;
         rotationDirection = CameraTransform.forward;
+        
         RotationNormal();
         
     }
@@ -50,6 +51,7 @@ public class MovePerson : MonoBehaviour
         Quaternion targetRot = Quaternion.Slerp(transform.rotation, lookDir, rotationSpeed);
         transform.rotation = targetRot;
     }
-
     
+
+
 }
