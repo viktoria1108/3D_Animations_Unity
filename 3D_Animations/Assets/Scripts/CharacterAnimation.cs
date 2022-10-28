@@ -5,15 +5,16 @@ using UnityEngine;
 
 public class CharacterAnimation : MonoBehaviour
 {
-   public Animator animator;
+    public Animator animator;
     public MovePerson movePerson;
     public CharacterStatus characterStatus;
+
     public void UpdateAnimation()
     {
         animator.SetBool("sprint", characterStatus.isSprint);
         animator.SetBool("aiming", characterStatus.isAiming);
 
-        if(!characterStatus.isAiming)
+        if (!characterStatus.isAiming)
         {
             AnimationNormal();
         }
@@ -25,7 +26,18 @@ public class CharacterAnimation : MonoBehaviour
 
     void AnimationNormal()
     {
-        animator.SetFloat("vertical", movePerson.moveAmount, 0.15f, Time.deltaTime);
+        if (movePerson.moveDirection != Vector3.zero && !Input.GetKey(KeyCode.LeftShift))
+        {
+            Walk();
+        }
+        if (movePerson.moveDirection != Vector3.zero && Input.GetKey(KeyCode.LeftShift))
+        {
+            Run();
+        }
+        else if (movePerson.moveDirection == Vector3.zero)
+        {
+            Idle();
+        }
     }
 
     void AnimationAiming()
@@ -37,5 +49,19 @@ public class CharacterAnimation : MonoBehaviour
         animator.SetFloat("horizontal", hor, 0.15f, Time.deltaTime);
     }
 
-    
+    private void Idle()
+    {
+        animator.SetFloat("vertical", 0f, 0.1f, Time.deltaTime);
+    }
+    private void Walk()
+    {
+        movePerson.moveAmount = 5;
+        animator.SetFloat("vertical", 0.5f, 0.1f, Time.deltaTime);
+    }
+    private void Run()
+    {
+        movePerson.moveAmount = 10;
+        animator.SetFloat("vertical", 1, 0.1f, Time.deltaTime);
+    }
+
 }
